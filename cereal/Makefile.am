@@ -10,6 +10,7 @@ lib_LTLIBRARIES = \
 	$(NULL)
 
 libcereal_la_SOURCES = \
+	posixserialconnection.vala \
 	serialconnection.vala \
 	$(NULL)
 
@@ -18,6 +19,7 @@ libcereal_la_VALAFLAGS = \
 	--vapi cereal-1.0.vapi \
 	--library cereal-1.0 \
 	--gir Cereal-1.0.gir \
+	--pkg posix \
 	$(NULL)
 
 libcereal_la_LIBADD = \
