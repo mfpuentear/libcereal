@@ -38,6 +38,7 @@ AC_SUBST(LIBCEREAL_LIBS)
 AC_CONFIG_FILES([Makefile
 	cereal-1.0.pc
 	cereal/Makefile
-	po/Makefile.in])
+	po/Makefile.in
+	tests/Makefile])
 
 AC_OUTPUT

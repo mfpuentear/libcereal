@@ -5,6 +5,7 @@ NULL =
 SUBDIRS = \
 	cereal \
 	po \
+	tests \
 	$(NULL)
 
 libcerealdocdir = ${prefix}/doc/libcereal
