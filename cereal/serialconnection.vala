@@ -57,3 +57,9 @@ public interface Cereal.SerialConnection : GLib.Object
 	public abstract ssize_t read (void* buffer, size_t length);
 	public abstract ssize_t write (void* buffer, size_t length);
 }
+
+namespace Cereal
+{
+	//Defined in serialconnectionfactory.c
+	public extern SerialConnection create_serial_connection ();
+}
