@@ -6,18 +6,17 @@ AM_CPPFLAGS = \
 	-I $(top_srcdir)/cereal \
 	$(NULL)
 
-noinst_PROGRAMS = posixtest
+noinst_PROGRAMS = echotest
 
-posixtest_SOURCES = \
-	posixtest.vala \
+echotest_SOURCES = \
+	echotest.vala \
 	$(NULL)
 
-posixtest_VALAFLAGS = \
+echotest_VALAFLAGS = \
 	--pkg cereal-1.0 --vapidir $(top_srcdir)/cereal \
-	--pkg posix \
 	$(NULL)
 
-posixtest_LDADD = \
+echotest_LDADD = \
 	../cereal/libcereal.la \
 	$(LIBCEREAL_LIBS) \
 	$(NULL)

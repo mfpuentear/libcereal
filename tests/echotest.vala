@@ -1,4 +1,4 @@
-/* posixtest.vala
+/* echotest.vala
  *
  * Copyright (C) 2010  Matias De la Puente
  *
@@ -33,7 +33,7 @@ void main (string[] args)
 	
 	_buffer = new char[1024];
 	
-	_connection = new PosixSerialConnection ();
+	_connection = create_serial_connection ();
 	_connection.open (args[1]);
 	
 	if (!_connection.is_opened)
