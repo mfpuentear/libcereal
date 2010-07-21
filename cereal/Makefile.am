@@ -10,6 +10,7 @@ lib_LTLIBRARIES = \
 	$(NULL)
 
 libcereal_la_SOURCES = \
+	bytestream.vala \
 	posixserialconnection.vala \
 	serialconnection.vala \
 	serialconnectionfactory.c \
