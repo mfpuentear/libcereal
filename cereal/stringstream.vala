@@ -84,48 +84,31 @@ public class Cereal.StringStream : GLib.Object
 			return;
 		
 		if ((_read_line_end == LineEnd.NULL || _read_line_end == LineEnd.NONE) && data == '\0')
-		{
 			flush_buffer ();
-			return;
-		}
-		if (_read_line_end == LineEnd.CR && data == '\r')
-		{
+		else if (_read_line_end == LineEnd.CR && data == '\r')
 			flush_buffer ();
-			return;
-		}
-		if (_read_line_end == LineEnd.CRLF)
+		else if (_read_line_end == LineEnd.CRLF)
 		{
 			if (data == '\r' && !_cr_received)
 				_cr_received = true;
 			else if (data == '\n' && _cr_received)
 			{
-				_buffer.truncate (_buffer.len-1);
 				_cr_received = false;
 				flush_buffer ();
-				return;
 			}
+			else
+				_buffer.append_c (data);
 		}
-		if (_read_line_end == LineEnd.ESC && data == '\x1b')
-		{
+		else if (_read_line_end == LineEnd.ESC && data == '\x1b')
 			flush_buffer ();
-			return;
-		}
-		if (_read_line_end == LineEnd.LF && data == '\n')
-		{
+		else if (_read_line_end == LineEnd.LF && data == '\n')
 			flush_buffer ();
-			return;
-		}
-		if (_read_line_end == LineEnd.SPACE && data == ' ')
-		{
+		else if (_read_line_end == LineEnd.SPACE && data == ' ')
 			flush_buffer ();
-			return;
-		}
-		if (_read_line_end == LineEnd.TAB && data == '\t')
-		{
+		else if (_read_line_end == LineEnd.TAB && data == '\t')
 			flush_buffer ();
-			return;
-		}
-		_buffer.append_c (data);
+		else
+			_buffer.append_c (data);
 	}
 	
 	private void flush_buffer ()
