@@ -13,6 +13,7 @@ libcereal_la_SOURCES = \
 	posixserialconnection.vala \
 	serialconnection.vala \
 	serialconnectionfactory.c \
+	stringstream.vala \
 	$(NULL)
 
 libcereal_la_VALAFLAGS = \
