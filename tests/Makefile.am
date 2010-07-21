@@ -6,7 +6,20 @@ AM_CPPFLAGS = \
 	-I $(top_srcdir)/cereal \
 	$(NULL)
 
-noinst_PROGRAMS = echotest stringstreamtest
+noinst_PROGRAMS = bytestreamtest echotest stringstreamtest
+
+bytestreamtest_SOURCES = \
+	bytestreamtest.vala \
+	$(NULL)
+
+bytestreamtest_VALAFLAGS = \
+	--pkg cereal-1.0 --vapidir $(top_srcdir)/cereal \
+	$(NULL)
+
+bytestreamtest_LDADD = \
+	../cereal/libcereal.la \
+	$(LIBCEREAL_LIBS) \
+	$(NULL)
 
 echotest_SOURCES = \
 	echotest.vala \
