@@ -38,8 +38,8 @@ void main (string[] args)
 	}
 	
 	var string_stream = new StringStream (connection);
-	string_stream.read_line_end = LineEnd.CRLF;
-	string_stream.write_line_end = LineEnd.CRLF;
+	string_stream.read_line_end = "\r\n";
+	string_stream.write_line_end = "\r\n";
 	
 	string_stream.new_line.connect (() => {
 		var line = string_stream.read_line ();

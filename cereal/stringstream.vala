@@ -19,26 +19,15 @@
  * 	Matias De la Puente <mfpuente.ar@gmail.com>
  */
 
-public enum Cereal.LineEnd
-{
-	CR,
-	CRLF,
-	ESC,
-	LF,
-	NONE,
-	NULL,
-	SPACE,
-	TAB
-}
-
 public class Cereal.StringStream : GLib.Object
 {
 	private SerialConnection _serial_connection;
 	private StringBuilder _buffer = new StringBuilder ();
 	private string _line;
+	private char null_char = '\0';
 	
-	public LineEnd read_line_end { set; get; default=LineEnd.NULL; }
-	public LineEnd write_line_end { set; get; default=LineEnd.NULL; }
+	public string? read_line_end { set; get; }
+	public string? write_line_end { set; get; }
 	
 	public signal void new_line ();
 	
@@ -55,25 +44,13 @@ public class Cereal.StringStream : GLib.Object
 	
 	public void write_line (string line)
 	{
-		if (!_serial_connection.is_opened)
+		if (!_serial_connection.is_opened || line.length == 0)
 			return;
 		_serial_connection.write ((char[])line, line.length);
-		switch (_write_line_end)
-		{
-			case LineEnd.NONE: break;
-			case LineEnd.NULL: write_char ('\0'); break;
-			case LineEnd.CR: write_char ('\r'); break;
-			case LineEnd.CRLF: _serial_connection.write ((char[])"\r\n", 2); break;
-			case LineEnd.ESC: write_char ('\x1b'); break;
-			case LineEnd.LF: write_char ('\n'); break;
-			case LineEnd.SPACE: write_char (' '); break;
-			case LineEnd.TAB: write_char ('\t'); break;
-		}
-	}
-	
-	private void write_char (char c)
-	{
-		_serial_connection.write (&c, 1);
+		if (_write_line_end == null)
+			_serial_connection.write (&null_char, 1);
+		else if (_write_line_end != "")
+			_serial_connection.write ((char[])_write_line_end, _write_line_end.length);
 	}
 	
 	private void on_new_data ()
@@ -82,32 +59,24 @@ public class Cereal.StringStream : GLib.Object
 		if (_serial_connection.read (&data, 1) == 0)
 			return;
 		
-		if ((_read_line_end == LineEnd.NULL || _read_line_end == LineEnd.NONE) && data == '\0')
-			flush_buffer ();
-		else if (_read_line_end == LineEnd.CR && data == '\r')
-			flush_buffer ();
-		else if (_read_line_end == LineEnd.CRLF && data == '\n')
+		if (data == '\0')
 		{
-			if (_buffer.str.has_suffix ("\r"))
-			{
-				_buffer.truncate (_buffer.len-1);
-				flush_buffer ();
-			}
+			flush_buffer ();
+			return;
 		}
-		else if (_read_line_end == LineEnd.ESC && data == '\x1b')
+		
+		_buffer.append_c (data);
+		if (_read_line_end != null && _buffer.str.has_suffix (_read_line_end))
+		{
+			_buffer.truncate (_buffer.len - _read_line_end.length);
 			flush_buffer ();
-		else if (_read_line_end == LineEnd.LF && data == '\n')
-			flush_buffer ();
-		else if (_read_line_end == LineEnd.SPACE && data == ' ')
-			flush_buffer ();
-		else if (_read_line_end == LineEnd.TAB && data == '\t')
-			flush_buffer ();
-		else
-			_buffer.append_c (data);
+		}
 	}
 	
 	private void flush_buffer ()
 	{
+		if (_buffer.len == 0)
+			return;
 		_line = _buffer.str;
 		_buffer.erase ();
 		this.new_line ();
