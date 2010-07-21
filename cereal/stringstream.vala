@@ -36,7 +36,6 @@ public class Cereal.StringStream : GLib.Object
 	private SerialConnection _serial_connection;
 	private StringBuilder _buffer = new StringBuilder ();
 	private string _line;
-	private bool _cr_received;
 	
 	public LineEnd read_line_end { set; get; default=LineEnd.NULL; }
 	public LineEnd write_line_end { set; get; default=LineEnd.NULL; }
@@ -87,17 +86,13 @@ public class Cereal.StringStream : GLib.Object
 			flush_buffer ();
 		else if (_read_line_end == LineEnd.CR && data == '\r')
 			flush_buffer ();
-		else if (_read_line_end == LineEnd.CRLF)
+		else if (_read_line_end == LineEnd.CRLF && data == '\n')
 		{
-			if (data == '\r' && !_cr_received)
-				_cr_received = true;
-			else if (data == '\n' && _cr_received)
+			if (_buffer.str.has_suffix ("\r"))
 			{
-				_cr_received = false;
+				_buffer.truncate (_buffer.len-1);
 				flush_buffer ();
 			}
-			else
-				_buffer.append_c (data);
 		}
 		else if (_read_line_end == LineEnd.ESC && data == '\x1b')
 			flush_buffer ();
