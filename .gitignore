@@ -38,4 +38,5 @@ cereal/Cereal-1.0.gir
 cereal/cereal-1.0.vapi
 cereal/libcereal.la
 tests/echotest
+tests/stringstreamtest
 !cereal/serialconnectionfactory.c
