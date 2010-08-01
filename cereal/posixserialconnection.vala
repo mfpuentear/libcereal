@@ -198,6 +198,11 @@ public class Cereal.PosixSerialConnection : SerialConnection, GLib.Object
 		return Posix.write (_fd, buffer, length);
 	}
 	
+	public void flush ()
+	{
+		tcflush (_fd, TCIOFLUSH);
+	}
+	
 	private bool on_input (IOChannel source, IOCondition condition)
 	{
 		if (IOCondition.IN in condition)

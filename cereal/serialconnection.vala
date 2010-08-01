@@ -56,6 +56,7 @@ public interface Cereal.SerialConnection : GLib.Object
 	public abstract void close ();
 	public abstract ssize_t read (void* buffer, size_t length);
 	public abstract ssize_t write (void* buffer, size_t length);
+	public abstract void flush ();
 }
 
 namespace Cereal
