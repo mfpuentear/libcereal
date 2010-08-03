@@ -40,6 +40,7 @@ stringstreamtest_SOURCES = \
 
 stringstreamtest_VALAFLAGS = \
 	--pkg cereal-1.0 --vapidir $(top_srcdir)/cereal \
+	--pkg gio-2.0 \
 	$(NULL)
 
 stringstreamtest_LDADD = \

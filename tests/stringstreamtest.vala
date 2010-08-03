@@ -20,6 +20,8 @@
  */
 using Cereal;
 
+StringStream _string_stream;
+
 void main (string[] args)
 {
 	if (args.length < 2)
@@ -37,18 +39,32 @@ void main (string[] args)
 		return;
 	}
 	
-	var string_stream = new StringStream (connection);
-	string_stream.read_line_end = "\r\n";
-	string_stream.write_line_end = "\r\n";
+	_string_stream = new StringStream (connection);
+	_string_stream.read_line_end = "\r\n";
+	_string_stream.write_line_end = "\r\n";
 	
-	string_stream.new_line.connect (() => {
-		var line = string_stream.read_line ();
+	echo.begin ();
+	
+	_string_stream.new_line.connect (() => {
+		var line = _string_stream.read_line ();
 		if (line == "ping")
-			string_stream.write_line ("pong");
+			_string_stream.write_line ("pong");
 		else
 			print (line + "\n");
 	});
 	
 	var main_loop = new MainLoop (null, false);
 	main_loop.run ();
+}
+
+async void echo ()
+{
+	Idle.add (echo.callback);
+	yield;
+	while (true)
+	{
+		_string_stream.write_line ("echo");
+		Timeout.add (2000, echo.callback);
+		yield;
+	}
 }
