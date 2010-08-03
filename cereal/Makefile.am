@@ -1,5 +1,21 @@
 NULL = 
 
+if WINDOWS
+EXTRA_SOURCES = \
+	winserialconnection.vala \
+	$(NULL)
+IGNORE_SOURCES = \
+	posixserialconnection.vala \
+	$(NULL)
+else
+EXTRA_SOURCES = \
+	posixserialconnection.vala \
+	$(NULL)
+IGNORE_SOURCES = \
+	winserialconnection.vala \
+	$(NULL)
+endif
+
 AM_CPPFLAGS = \
 	$(LIBCEREAL_CFLAGS) \
 	-include $(CONFIG_HEADER) \
@@ -11,10 +27,10 @@ lib_LTLIBRARIES = \
 
 libcereal_la_SOURCES = \
 	bytestream.vala \
-	posixserialconnection.vala \
 	serialconnection.vala \
 	serialconnectionfactory.c \
 	stringstream.vala \
+	$(EXTRA_SOURCES) \
 	$(NULL)
 
 libcereal_la_VALAFLAGS = \
@@ -23,10 +39,13 @@ libcereal_la_VALAFLAGS = \
 	--library cereal-1.0 \
 	--gir Cereal-1.0.gir \
 	--pkg posix \
+	--vapidir $(top_srcdir)/vapi \
+	--pkg windows \
+	$(IGNORE_SOURCES) \
 	$(NULL)
 
 libcereal_la_LIBADD = \
-	$(CEREAL_LIBS) \
+	$(LIBCEREAL_LIBS) \
 	$(NULL)
 
 libcereal_la_LDFLAGS = -version-info $(LIBCEREAL_LT_VERSION) -no-undefined

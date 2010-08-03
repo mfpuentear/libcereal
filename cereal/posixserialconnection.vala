@@ -200,6 +200,8 @@ public class Cereal.PosixSerialConnection : SerialConnection, GLib.Object
 	
 	public void flush ()
 	{
+		if (!_is_opened)
+			return;
 		tcflush (_fd, TCIOFLUSH);
 	}
 	
