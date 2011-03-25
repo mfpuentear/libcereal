@@ -76,6 +76,7 @@ public class Cereal.ByteStream : GLib.Object
 		{
 			_bytes = data;
 			this.new_data ();
+			return;
 		}
 		
 		_buffer.append (data);
