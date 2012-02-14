@@ -67,7 +67,7 @@ public class Cereal.PosixSerialConnection : SerialConnection, GLib.Object
 			return;
 		
 		termios settings = { 0 };
-		tcgetattr (_fd, settings);
+		tcgetattr (_fd, out settings);
 		
 		//baud_rate
 		speed_t speed = 0;
@@ -84,8 +84,8 @@ public class Cereal.PosixSerialConnection : SerialConnection, GLib.Object
 			case 57600: speed = B57600; break;
 			case 115200: speed = B115200; break;
 		}
-		cfsetispeed (settings, speed);
-		cfsetispeed (settings, speed);
+		cfsetispeed (ref settings, speed);
+		cfsetispeed (ref settings, speed);
 		
 		//data_bits
 		settings.c_cflag &= ~CSIZE;
